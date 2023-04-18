@@ -7,7 +7,7 @@ import cors from 'cors';
 dotenv.config();
 
 const app: Express = express();
-const port = process.env.PORT || 3001;
+const port = process.env.PORT || 8050;
 app.use(cors({ origin: 'http://localhost:3000' }));
 app.use(express.json())
 
@@ -21,7 +21,7 @@ mongoose.connect("mongodb://127.0.0.1:27017/Food-Review")
 .then(()=>
 {
   console.log('🟢🟢🟢 [server]: connection established 🟢🟢🟢	')
-}).catch(err => {
+}).catch( (err) => {
   console.log(`🔴🔴🔴 [server]: Failed to connect 🔴🔴🔴 , ${err}`)
 })
 
