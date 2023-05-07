@@ -11,8 +11,10 @@ const app: Express = express();
 const port = process.env.PORT || 8050;
 app.use(cors({ origin: 'http://localhost:3000' }));
 app.use(express.json())
+app.use(express.static('images'));
 
-app.use("/Restauran",RestaurantRoute)
+
+app.use("/Restaurant",RestaurantRoute)
 
 app.listen(port, () => {
   console.log(`⚡️[server]: Server is running at http://localhost:${port}`);
