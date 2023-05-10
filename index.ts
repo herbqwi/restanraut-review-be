@@ -1,32 +1,35 @@
-import express, { Express, Request, Response } from 'express';
-import dotenv from 'dotenv';
+import express from "express";
 import mongoose from 'mongoose';
-import  RestaurantRoute from './Routes/restaurant';
-import cors from 'cors';
+import bodyParser from 'body-parser';
+
+import restaurantRouter from "./src/routes/restaurant.route";
+
+const app = express();
+var cors = require('cors');
 
 
-dotenv.config();
-
-const app: Express = express();
-const port = process.env.PORT || 8050;
-app.use(cors({ origin: 'http://localhost:3000' }));
-app.use(express.json())
-app.use(express.static('images'));
+app.use(cors())
+app.use(bodyParser.json({ limit: '50mb' })); // Increase the limit to 50 MB
+app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 
 
-app.use("/Restaurant",RestaurantRoute)
+
+app.use('/restaurant', restaurantRouter);
+
+const port = process.env.PORT || 8000;
 
 app.listen(port, () => {
-  console.log(`⚡️[server]: Server is running at http://localhost:${port}`);
-  dbConnection()
+  console.log(`⚡️[server]: Server is running at http://127.0.0.1:${port}`);
+  dbConnect();
 });
 
-const dbConnection = () => {
-mongoose.connect("mongodb://127.0.0.1:27017/Food-Review")
-.then(()=>
-{
-  console.log('🟢🟢🟢 [server]: connection established 🟢🟢🟢	')
-}).catch( (err) => {
-  console.log(`🔴🔴🔴 [server]: Failed to connect 🔴🔴🔴 , ${err}`)
-})
+const dbConnect = () => {
+  console.log("connecting to db...");
+  mongoose.connect("mongodb://127.0.0.1:27017/restaurant")
+    .then(() => {
+      console.log(`🤗 [server]: Connected to MongoDB`);
+    })
+    .catch((err) => {
+      console.log(`🤨 [server]: Failed to connect to mongodb ${err}`);
+    });
 }
