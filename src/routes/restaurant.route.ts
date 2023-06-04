@@ -36,7 +36,7 @@ router.get(`/:restaurantId`, async (req, res) => {
 
 router.delete(`/:restaurantId`, async (req, res) => {
   const { restaurantId } = req.params;
-  const result = await restaurantController.deleteRestaurat(restaurantId);
+  const result = await restaurantController.deleteRestaurant(restaurantId);
 
   if (result) {
     res.status(200).send(result);

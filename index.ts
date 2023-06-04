@@ -3,6 +3,7 @@ import mongoose from 'mongoose';
 import bodyParser from 'body-parser';
 
 import restaurantRouter from "./src/routes/restaurant.route";
+import userRouter from './src/routes/user.route'
 
 const app = express();
 var cors = require('cors');
@@ -15,6 +16,7 @@ app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 
 
 app.use('/restaurant', restaurantRouter);
+app.use('/user', userRouter);
 
 const port = process.env.PORT || 8000;
 
