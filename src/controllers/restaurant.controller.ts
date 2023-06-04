@@ -10,7 +10,9 @@ const createNewRestaurant = async (restaurant: IRestaurant.RestaurantData) => {
 const getRestaurant = async (restaurantId: string) => {
   return await Restaurant.findById(restaurantId);
 }
-
+const getRestaurantByAddress = async (restaurantAddress: string) => {
+  return await Restaurant.find({address: restaurantAddress});
+}
 const deleteRestaurat = async (restaurantId: string) => {
   return await Restaurant.findByIdAndDelete(restaurantId);
 }
@@ -57,4 +59,4 @@ const deleteReview = async (restaurantId: string, reviewId: string) => {
   return { message: 'Review deleted successfully' };
 };
 
-export default { createNewRestaurant, getRestaurant, deleteRestaurat, updateRestaurant, getReviews, addReview, deleteReview };
+export default { createNewRestaurant, getRestaurant, deleteRestaurat, updateRestaurant, getReviews, addReview, deleteReview , getRestaurantByAddress};
