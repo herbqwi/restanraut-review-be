@@ -28,20 +28,15 @@ router.put('/:restaurantId', async (req, res) => {
   }
 })
 
-router.get(`/:restaurantId`, async (req, res) => {
-  const { restaurantId } = req.params;
-  const result = await restaurantController.getRestaurant(restaurantId);
-  res.status(result != null ? 200 : 404).send(result);
-})
-
-router.delete(`/:restaurantId`, async (req, res) => {
-  const { restaurantId } = req.params;
-  const result = await restaurantController.deleteRestaurant(restaurantId);
-
-  if (result) {
+router.get(`/reviews`, async (req, res) => {
+  try {
+    console.log(`POST /restaurant/reviews/`)
+    const result = await restaurantController.getAllReviews();
     res.status(200).send(result);
-  } else {
-    res.status(404).send('Restaurant not found');
+  } catch (e: any) {
+    const errMsg = `An error occurred while getting all reviews`;
+    console.log(`${errMsg}: `, e);
+    res.status(400).send(errMsg);
   }
 })
 
@@ -81,6 +76,23 @@ router.delete('/review/:restaurantId/:reviewId', async (req, res) => {
     const errMsg = `An error occurred while deleting a review from ${restaurantId}`;
     console.log(`${errMsg}: `, e);
     res.status(400).send(errMsg);
+  }
+})
+
+router.get(`/:restaurantId`, async (req, res) => {
+  const { restaurantId } = req.params;
+  const result = await restaurantController.getRestaurant(restaurantId);
+  res.status(result != null ? 200 : 404).send(result);
+})
+
+router.delete(`/:restaurantId`, async (req, res) => {
+  const { restaurantId } = req.params;
+  const result = await restaurantController.deleteRestaurant(restaurantId);
+
+  if (result) {
+    res.status(200).send(result);
+  } else {
+    res.status(404).send('Restaurant not found');
   }
 })
 

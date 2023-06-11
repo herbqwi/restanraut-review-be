@@ -35,6 +35,7 @@ export namespace IRestaurant {
     images?: string[];
     starRating: number;
     userId: string;
+    restaurantId?: string,
   }
 
   export interface MenuItem {
