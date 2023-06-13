@@ -5,10 +5,8 @@ const router = Router()
 
 router.post(`/auth`, async (req, res) => {
   try {
-    console.log(`POST /auth`);
-    const { credentials, token } = req.body;
-    const result = await userController.authUser({ credentials, token });
-    console.log(`result: `, result);
+    console.log(`POST /auth: `, req.body);
+    const result = await userController.authUser(req.body);
     if (result) {
       res.status(200).send(result);
     } else {

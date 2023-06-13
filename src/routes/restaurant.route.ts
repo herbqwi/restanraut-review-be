@@ -1,5 +1,6 @@
 import { Router } from "express";
 import restaurantController from "../controllers/restaurant.controller";
+import { IRestaurant } from "../interfaces/restaurant";
 
 const router = Router()
 
@@ -77,6 +78,19 @@ router.delete('/review/:restaurantId/:reviewId', async (req, res) => {
     console.log(`${errMsg}: `, e);
     res.status(400).send(errMsg);
   }
+})
+
+router.get(`/`, async (req, res) => {
+  let { name, services, cuisines, companies, city, sortedBy } = req.query
+  const parsedName = name as string;
+  const parsedServices = JSON.parse((services ?? `[]`) as string) as IRestaurant.Service[];
+  const parsedCuisines = JSON.parse((cuisines ?? `[]`) as string) as IRestaurant.Cuisine[];
+  const parsedCompanies = JSON.parse((companies ?? `[]`) as string) as IRestaurant.Company[];
+  const parsedCity = Number(city ?? `0`) as IRestaurant.City;
+  const parsedSortedBy = Number(sortedBy ?? `0`) as IRestaurant.SortedBy;
+
+  const result = await restaurantController.getRestaurants({ name: parsedName, services: parsedServices, cuisines: parsedCuisines, companies: parsedCompanies, city: parsedCity, sortedBy: parsedSortedBy });
+  res.status(result != null ? 200 : 404).send(result);
 })
 
 router.get(`/:restaurantId`, async (req, res) => {

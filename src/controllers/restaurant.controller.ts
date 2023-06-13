@@ -1,5 +1,7 @@
 import { IRestaurant } from "../interfaces/restaurant";
 import Restaurant from "../models/restaurant.model";
+import { checkArr } from "../service/general.service";
+import { sortRestaurants } from "../service/restaurants.service";
 
 
 const createNewRestaurant = async (restaurant: IRestaurant.RestaurantData) => {
@@ -9,6 +11,18 @@ const createNewRestaurant = async (restaurant: IRestaurant.RestaurantData) => {
 
 const getRestaurant = async (restaurantId: string) => {
   return await Restaurant.findById(restaurantId);
+}
+
+const getRestaurants = async ({ name, services, cuisines, companies, city, sortedBy }: { name: string, services: IRestaurant.Service[], cuisines: IRestaurant.Cuisine[], companies: IRestaurant.Company[], city: IRestaurant.City, sortedBy: IRestaurant.SortedBy }) => {
+  const restaurants: IRestaurant.RestaurantData[] = await Restaurant.find();
+  const filteredRestaurants = restaurants.filter(restaurant => (!name || restaurant.name.includes(name)) &&
+    (!city || restaurant.city == city) &&
+    (!services.length || checkArr(restaurant.services, services)) &&
+    (!cuisines.length || cuisines.find(cuisine => restaurant.cuisine == cuisine)) &&
+    (!companies.length || checkArr(restaurant.companies, companies)));
+
+  const sortedRestaurants = sortRestaurants(filteredRestaurants, sortedBy);
+  return sortedRestaurants.map(restaurant => restaurant.name);
 }
 
 const deleteRestaurant = async (restaurantId: string) => {
@@ -77,4 +91,4 @@ const deleteReview = async (restaurantId: string, reviewId: string) => {
   return { message: 'Review deleted successfully' };
 };
 
-export default { createNewRestaurant, getRestaurant, deleteRestaurant, updateRestaurant, getReviews, getAllReviews, addReview, deleteReview };
+export default { createNewRestaurant, getRestaurant, getRestaurants, deleteRestaurant, updateRestaurant, getReviews, getAllReviews, addReview, deleteReview };
