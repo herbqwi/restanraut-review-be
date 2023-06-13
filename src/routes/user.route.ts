@@ -25,7 +25,7 @@ router.post('/', async (req, res) => {
     const result = await userController.createNewUser(req.body);
     res.status(200).send(result);
   } catch (e: any) {
-    const errMsg = `An error occurred while creating a new restaurant`;
+    const errMsg = `An error occurred while creating a new user`;
     console.log(`${errMsg}: `, e);
     res.status(400).send(errMsg);
   }
@@ -33,11 +33,12 @@ router.post('/', async (req, res) => {
 
 router.put('/:userId', async (req, res) => {
   try {
+    console.log(`update /user`)
     const { userId } = req.params;
     const result = await userController.updateUser(userId, req.body);
     res.status(200).send(result);
   } catch (e: any) {
-    const errMsg = `An error occurred while updating an existing restaurant`;
+    const errMsg = `An error occurred while updating an existing user`;
     console.log(`${errMsg}: `, e);
     res.status(400).send(errMsg);
   }

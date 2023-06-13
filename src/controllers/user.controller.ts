@@ -9,7 +9,7 @@ const authUser = async ({ credentials, token }: { credentials?: { email: string,
 }
 
 const createNewUser = async (user: IUser.UserData) => {
-  const newUser = new User(user);
+  const newUser = new User(user);  
   return await newUser.save();
 }
 
@@ -22,7 +22,9 @@ const deleteUser = async (userId: string) => {
 }
 
 const updateUser = async (userId: string, userData: IUser.UserData) => {
-  const updatedRestaurant = Restaurant.findByIdAndUpdate(userId, userData);
+  const updatedRestaurant = Restaurant.findByIdAndUpdate(userId,userData);
+  console.log("update",updatedRestaurant);
+  
   return await (new Restaurant(updatedRestaurant)).save();
 }
 
