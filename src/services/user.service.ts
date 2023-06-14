@@ -9,15 +9,18 @@ const isAuthenticated = async ({ credentials, token }: { credentials?: { email: 
         if (err) resolve(null);
         resolve({ ...(await User.findById(decoded.id)), token });
       });
-    })
+    });
+    
     if (tokenStatus != null) return tokenStatus;
   }
 
   if (credentials) {
     const foundUser = await User.findOne({ email: credentials.email, password: credentials.password });
     if (foundUser != null) {
+      console.log(foundUser);
+      
       const generatedToken = await new Promise(resolve => {
-        jwt.sign({ userId: foundUser }, `my_key`, (err: any, token: any) => {
+        jwt.sign({ id: foundUser._id, email: foundUser.email }, `my_key`, (err: any, token: any) => {          
           resolve(token);
         });
       })
