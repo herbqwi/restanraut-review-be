@@ -14,7 +14,7 @@ export namespace IUser {
     password: string;
     firstName: string;
     lastName: string;
-    image: string;
+    image?: string;
     role: Role;
     token?: string,
     createdAt: Date;

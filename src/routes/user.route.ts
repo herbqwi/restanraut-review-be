@@ -1,5 +1,6 @@
 import { Router } from "express";
 import userController from "../controllers/user.controller";
+import { IUser } from "../interfaces/user";
 
 const router = Router()
 
@@ -23,7 +24,7 @@ router.post('/', async (req, res) => {
     const result = await userController.createNewUser(req.body);
     res.status(200).send(result);
   } catch (e: any) {
-    const errMsg = `An error occurred while creating a new restaurant`;
+    const errMsg = `An error occurred while creating a new user`;
     console.log(`${errMsg}: `, e);
     res.status(400).send(errMsg);
   }
@@ -32,16 +33,23 @@ router.post('/', async (req, res) => {
 router.put('/:userId', async (req, res) => {
   try {
     const { userId } = req.params;
-    const result = await userController.updateUser(userId, req.body);
+    const result = await userController.updateUser(userId, req.body as IUser.UserData);
     res.status(200).send(result);
   } catch (e: any) {
-    const errMsg = `An error occurred while updating an existing restaurant`;
+    const errMsg = `An error occurred while updating an existing user`;
     console.log(`${errMsg}: `, e);
     res.status(400).send(errMsg);
   }
 })
 
+router.get(`/`, async (req, res) => {
+  console.log(`GET /`)
+  const result = await userController.getAllUsers();
+  res.status(result != null ? 200 : 404).send(result);
+})
+
 router.get(`/:userId`, async (req, res) => {
+  console.log(`GET /:userId`)
   const { userId } = req.params;
   const result = await userController.getUser(userId);
   res.status(result != null ? 200 : 404).send(result);
@@ -54,7 +62,7 @@ router.delete(`/:userId`, async (req, res) => {
   if (result) {
     res.status(200).send(result);
   } else {
-    res.status(404).send('Restaurant not found');
+    res.status(404).send('User not found');
   }
 })
 

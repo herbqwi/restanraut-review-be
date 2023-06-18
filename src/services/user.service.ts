@@ -8,7 +8,9 @@ const isAuthenticated = async ({ credentials, token }: { credentials?: { email: 
     const tokenStatus = await new Promise(resolve => {
       jwt.verify(token, `my_key`, async (err, decoded: any) => {
         if (err) resolve(null);
-        resolve({ ...(await User.findById(decoded._id)), token });
+        const foundUser = await User.findById(decoded.userId);
+        const result = { ...foundUser, token };
+        resolve(result);
       });
     })
     if (tokenStatus != null) return tokenStatus;
@@ -18,7 +20,7 @@ const isAuthenticated = async ({ credentials, token }: { credentials?: { email: 
     const foundUser = await User.findOne({ email: credentials.email, password: credentials.password });
     if (foundUser != null) {
       const generatedToken = await new Promise(resolve => {
-        jwt.sign({ userId: foundUser }, `my_key`, (err: any, token: any) => {
+        jwt.sign({ userId: foundUser._id }, `my_key`, (err: any, token: any) => {
           resolve(token);
         });
       })
