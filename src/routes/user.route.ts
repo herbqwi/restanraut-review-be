@@ -2,14 +2,14 @@ import { Router } from "express";
 import userController from "../controllers/user.controller";
 import { jwtParser } from './../middlewares/jwt-parser';
 import { authorized } from "../middlewares/authentication";
+import { IUser } from "../interfaces/user";
 
 const router = Router()
 
 router.post(`/auth`, async (req, res) => {
   try {
-    const { credentials, token } = req.body;
-    const result = await userController.authUser({ credentials, token });
-    console.log(`result: `, result);
+    console.log(`POST /auth: `, req.body);
+    const result = await userController.authUser(req.body);
     if (result) {
       res.status(200).send(result);
     } else {
@@ -53,7 +53,14 @@ router.put('/update', jwtParser, authorized, async (req, res) => {
   }
 })
 
+router.get(`/`, async (req, res) => {
+  console.log(`GET /`)
+  const result = await userController.getAllUsers();
+  res.status(result != null ? 200 : 404).send(result);
+})
+
 router.get(`/:userId`, async (req, res) => {
+  console.log(`GET /:userId`)
   const { userId } = req.params;
   const result = await userController.getUser(userId);
   res.status(result != null ? 200 : 404).send(result);
@@ -75,7 +82,7 @@ router.delete(`/:userId`, async (req, res) => {
   if (result) {
     res.status(200).send(result);
   } else {
-    res.status(404).send('Restaurant not found');
+    res.status(404).send('User not found');
   }
 })
 
