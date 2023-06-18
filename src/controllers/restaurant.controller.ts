@@ -13,6 +13,10 @@ const getRestaurant = async (restaurantId: string) => {
   return await Restaurant.findById(restaurantId);
 }
 
+const getRestaurantByAddress = async (restaurantAddress: string) => {
+  return await Restaurant.find({address: restaurantAddress});
+}
+
 const getRestaurants = async ({ name, services, cuisines, companies, city, sortedBy }: { name: string, services: IRestaurant.Service[], cuisines: IRestaurant.Cuisine[], companies: IRestaurant.Company[], city: IRestaurant.City, sortedBy: IRestaurant.SortedBy }) => {
   const restaurants: IRestaurant.RestaurantData[] = await Restaurant.find();
   const filteredRestaurants = restaurants.filter(restaurant => (!name || restaurant.name.includes(name)) &&
@@ -96,4 +100,4 @@ const deleteReview = async (restaurantId: string, reviewId: string) => {
   return { message: 'Review deleted successfully' };
 };
 
-export default { createNewRestaurant, getRestaurant, getRestaurants, deleteRestaurant, updateRestaurant, getReviews, getAllReviews, addReview, deleteReview };
+export default { createNewRestaurant, getRestaurant, getRestaurants, deleteRestaurant, updateRestaurant, getReviews, getAllReviews, addReview, deleteReview, getRestaurantByAddress };
