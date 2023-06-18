@@ -3,6 +3,23 @@ import express from 'express';
 
 export namespace IRestaurant {
 
+  export enum SortedBy {
+    BEST_MATCH,
+    MOST_SERVICES,
+    CLOSEST_DISTANCE,
+    LOWEST_RATED,
+    HIGHEST_RATED,
+  }
+
+  export enum City {
+    HEBRON,
+    NABLUS,
+    JENIN,
+    RAMALLAH,
+    BETHLEHEM,
+    GAZA,
+  }
+
   export enum Service {
     DELIVERY,
     FREE_WIFI,
@@ -35,6 +52,7 @@ export namespace IRestaurant {
     images?: string[];
     starRating: number;
     userId: string;
+    restaurantId?: string,
   }
 
   export interface MenuItem {
@@ -61,9 +79,11 @@ export namespace IRestaurant {
     phoneNumber: string;
     images: string[];
     cuisine: Cuisine;
+    companies: IRestaurant.Company[];
     services: Service[];
     reviews?: Review[];
     menuItems?: MenuItem[],
+    city: City;
     ownerId: mongoose.Types.ObjectId;
     createdAt: Date;
     updatedAt: Date;

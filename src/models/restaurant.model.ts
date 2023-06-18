@@ -1,4 +1,4 @@
-import mongoose, { Schema, Document, Mongoose, mongo } from 'mongoose';
+import mongoose, { Schema } from 'mongoose';
 import { IRestaurant } from '../interfaces/restaurant';
 
 const restaurantSchema = new Schema<IRestaurant.RestaurantData>({
@@ -82,8 +82,6 @@ const restaurantSchema = new Schema<IRestaurant.RestaurantData>({
     default: Date.now,
   },
 })
-
-
 
 const Restaurant = mongoose.model<IRestaurant.RestaurantData>('Restaurant', restaurantSchema);
 
