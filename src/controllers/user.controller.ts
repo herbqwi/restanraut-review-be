@@ -17,13 +17,23 @@ const getUser = async (userId: string) => {
   return await User.findById(userId);
 }
 
+const getAllUsers = async () => {
+  return await User.find();
+}
+
 const deleteUser = async (userId: string) => {
   return await User.findByIdAndDelete(userId);
 }
 
 const updateUser = async (userId: string, userData: IUser.UserData) => {
-  const updatedRestaurant = Restaurant.findByIdAndUpdate(userId, userData);
-  return await (new Restaurant(updatedRestaurant)).save();
-}
+  const user = await User.findById(userId);
+  if (!user) {
+    throw new Error(`User with ID ${userId} not found.`);
+  }
+  Object.assign(user, userData);
 
-export default { authUser, createNewUser, getUser, deleteUser, updateUser };
+  return await user.save();
+};
+
+
+export default { authUser, createNewUser, getUser, getAllUsers, deleteUser, updateUser };

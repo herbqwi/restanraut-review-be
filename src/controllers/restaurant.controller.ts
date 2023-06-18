@@ -30,9 +30,14 @@ const deleteRestaurant = async (restaurantId: string) => {
 }
 
 const updateRestaurant = async (restaurantId: string, restaurantData: IRestaurant.RestaurantData) => {
-  const updatedRestaurant = Restaurant.findByIdAndUpdate(restaurantId, restaurantData);
-  return await (new Restaurant(updatedRestaurant)).save();
-}
+  const restaurant = await Restaurant.findById(restaurantId);
+  if (!restaurant) {
+    throw new Error(`Restaurant with ID ${restaurantId} not found.`);
+  }
+  Object.assign(restaurant, restaurantData);
+
+  return await restaurant.save();
+};
 
 const getAllReviews = async () => {
   const restaurants = await Restaurant.find();
