@@ -26,7 +26,13 @@ const deleteUser = async (userId: string) => {
 }
 
 const updateUser = async (userId: string, userData: IUser.UserData) => {
-  return await User.findOneAndUpdate({ _id: userId }, userData).select(['firstName', 'lastName', 'email']);
-}
+  const user = await User.findById(userId);
+  if (!user) {
+    throw new Error(`User with ID ${userId} not found.`);
+  }
+  Object.assign(user, userData);
+
+  return await user.save();
+};
 
 export default { authUser, createNewUser, getUser, getAllUsers, deleteUser, updateUser };

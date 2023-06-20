@@ -3,6 +3,7 @@ import userController from "../controllers/user.controller";
 import { jwtParser } from './../middlewares/jwt-parser';
 import { authorized } from "../middlewares/authentication";
 import { IUser } from "../interfaces/user";
+import jwt from 'jsonwebtoken';
 
 const router = Router()
 
@@ -33,18 +34,12 @@ router.post('/', async (req, res) => {
   }
 })
 
-router.put('/update', jwtParser, authorized, async (req, res) => {
+router.put('/:userId', async (req, res) => {
+  console.log(`PUT /`)
   try {
-    console.log(`update /user`);
-    const user = res.locals.user._doc;
-
-    if(req.body.password === '') {
-      delete req.body.password;
-    } else {
-      // bycrypt new password.
-    }
-
-    const result = await userController.updateUser(user._id, req.body);
+    const { userId } = req.params;
+    const result = await userController.updateUser(userId, req.body as IUser.UserData);
+    console.log(`result: `, result);
     res.status(200).send(result);
   } catch (e: any) {
     const errMsg = `An error occurred while updating an existing user`;
@@ -75,6 +70,28 @@ router.get(`/`, jwtParser, authorized, async (req, res) => {
     lastName: user.lastName
   });
 })
+
+router.delete(`/`, async (req, res) => { // fix this later
+  const token = req.headers.authorization as string;
+  const userId: string | null = await new Promise(resolve => {
+    jwt.verify(token, `my_key`, async (err, decoded: any) => {
+      if (err) resolve(null);
+      resolve(decoded.id);
+    });
+  });
+  console.log(`userId: `, userId);
+  if (userId) {
+    const result = await userController.deleteUser(userId);
+    res.status(200).send(result);
+    // if (result) {
+    // } else {
+    //   res.status(200).send('An error occurred while deleting the user');
+    // }
+  } else {
+    res.status(200).send('User not found');
+  }
+})
+
 router.delete(`/:userId`, async (req, res) => {
   const { userId } = req.params;
   const result = await userController.deleteUser(userId);

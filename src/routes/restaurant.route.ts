@@ -16,20 +16,20 @@ router.post('/', async (req, res) => {
     res.status(400).send(errMsg);
   }
 })
-router.get(`/:address`, async (req, res) => {
+// router.get(`/:address`, async (req, res) => {
 
-  console.log(`GET /restaurant`)
-  const address = req.body.address;
-  console.log(address);
-  const result = await restaurantController.getRestaurantByAddress(address);
-  console.log(result);
-  if(result != null){
-    res.status(200).send(result);
-  }else{
-    res.status(404).send("ffffff")
-  }
-  
-})
+//   console.log(`GET /restaurant`)
+//   const address = req.body.address;
+//   console.log(address);
+//   const result = await restaurantController.getRestaurantByAddress(address);
+//   console.log(result);
+//   if (result != null) {
+//     res.status(200).send(result);
+//   } else {
+//     res.status(404).send("ffffff")
+//   }
+
+// })
 
 
 router.put('/:restaurantId', async (req, res) => {
@@ -110,7 +110,9 @@ router.get(`/`, async (req, res) => {
 
 router.get(`/:restaurantId`, async (req, res) => {
   const { restaurantId } = req.params;
+  console.log(`restuarnatId: `, restaurantId);
   const result = await restaurantController.getRestaurant(restaurantId);
+  console.log(`result: `, result);
   res.status(result != null ? 200 : 404).send(result);
 })
 
