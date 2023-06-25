@@ -54,6 +54,13 @@ router.get(`/`, async (req, res) => {
   res.status(result != null ? 200 : 404).send(result);
 })
 
+router.get(`/email/:email`, async (req, res) => {
+  console.log(`GET /email`)
+  const { email } = req.params;
+  const result = await userController.isEmailAvailable(email);
+  res.sendStatus(result ? 200 : 404);
+})
+
 router.get(`/:userId`, async (req, res) => {
   console.log(`GET /:userId`)
   const { userId } = req.params;
@@ -61,15 +68,15 @@ router.get(`/:userId`, async (req, res) => {
   res.status(result != null ? 200 : 404).send(result);
 });
 
-router.get(`/`, jwtParser, authorized, async (req, res) => {
-  const user = res.locals.user._doc;
+// router.get(`/`, jwtParser, authorized, async (req, res) => {
+//   const user = res.locals.user._doc;
 
-  return res.status(200).send({
-    email: user.email,
-    firstName: user.firstName,
-    lastName: user.lastName
-  });
-})
+//   return res.status(200).send({
+//     email: user.email,
+//     firstName: user.firstName,
+//     lastName: user.lastName
+//   });
+// })
 
 router.delete(`/`, async (req, res) => { // fix this later
   const token = req.headers.authorization as string;

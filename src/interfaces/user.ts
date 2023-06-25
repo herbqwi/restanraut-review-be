@@ -1,4 +1,5 @@
 import express from 'express';
+import { IRestaurant } from './restaurant';
 
 export namespace IUser {
 
@@ -14,6 +15,8 @@ export namespace IUser {
     password: string;
     firstName: string;
     lastName: string;
+    phoneNumber?: string;
+    city?: IRestaurant.City;
     image?: string;
     role: Role;
     token?: string,
