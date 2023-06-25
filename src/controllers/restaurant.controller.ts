@@ -26,7 +26,9 @@ const getRestaurants = async ({ name, services, cuisines, companies, city, sorte
     (!companies.length || checkArr(restaurant.companies, companies)));
 
   const sortedRestaurants = sortRestaurants(filteredRestaurants, sortedBy);
-  return sortedRestaurants.map(restaurant => restaurant.name);
+  console.log(sortedRestaurants);
+  
+  return sortedRestaurants;
 }
 
 const deleteRestaurant = async (restaurantId: string) => {

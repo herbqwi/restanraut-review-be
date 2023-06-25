@@ -13,7 +13,8 @@ const calculateAvgStars = (restaurant: IRestaurant.RestaurantData) => {
 const sortRestaurants = (restaurants: IRestaurant.RestaurantData[], sortedBy: IRestaurant.SortedBy): IRestaurant.RestaurantData[] => {
   switch (sortedBy) {
     case IRestaurant.SortedBy.MOST_SERVICES:
-      return restaurants.sort((a, b) => b.services.length - a.services.length);
+      console.log(restaurants.map(rest => rest.services))
+      return restaurants.sort((a, b) => (b?.services.length? b.services.length : 0) - (a?.services.length? a.services.length : 0));
     case IRestaurant.SortedBy.CLOSEST_DISTANCE:
     // return restaurants;
     case IRestaurant.SortedBy.LOWEST_RATED:
