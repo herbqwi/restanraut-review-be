@@ -13,6 +13,11 @@ const createNewUser = async (user: IUser.UserData) => {
   return await newUser.save();
 }
 
+const isEmailAvailable = async (email: string) => {
+  const foundEmail = await User.findOne({ email });
+  return !foundEmail;
+}
+
 const getUser = async (userId: string) => {
   return await User.findById(userId);
 }
@@ -35,4 +40,4 @@ const updateUser = async (userId: string, userData: IUser.UserData) => {
   return await user.save();
 };
 
-export default { authUser, createNewUser, getUser, getAllUsers, deleteUser, updateUser };
+export default { authUser, createNewUser, isEmailAvailable, getUser, getAllUsers, deleteUser, updateUser };
