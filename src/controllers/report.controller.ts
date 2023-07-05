@@ -7,7 +7,7 @@ const createNewReport = async (report: IReport.ReportData) => {
 }
 
 const getReport = async (reportId: string) => {
-  return await Report.findById(reportId);
+  return await Report.findById(reportId)
 }
 
 const getAllReports = async () => {

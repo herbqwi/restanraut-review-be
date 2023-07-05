@@ -1,5 +1,4 @@
 import { IUser } from "../interfaces/user";
-import Restaurant from "../models/restaurant.model";
 import User from "../models/user.model";
 import { isAuthenticated } from "../services/user.service";
 
@@ -32,6 +31,7 @@ const deleteUser = async (userId: string) => {
 
 const updateUser = async (userId: string, userData: IUser.UserData) => {
   const user = await User.findById(userId);
+  console.log(user)
   if (!user) {
     throw new Error(`User with ID ${userId} not found.`);
   }

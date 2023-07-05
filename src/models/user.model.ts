@@ -21,12 +21,15 @@ const userSchema = new Schema<IUser.UserData>({
   image: {
     type: String,
     required: false,
-    default: ''
-  },
+   },
   role: {
     type: Number,
     default: 0,
     required: true,
+  },
+  city: {
+    type: Number,
+    default: 0,
   },
   createdAt: {
     type: Date,

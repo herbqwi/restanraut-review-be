@@ -3,6 +3,7 @@ import reportController from "../controllers/report.controller";
 
 const router = Router()
 router.post('/', async (req, res) => {
+  console.log(`POST /report`)
   try {
     console.log(`POST /report`)
     const result = await reportController.createNewReport(req.body);

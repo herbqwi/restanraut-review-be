@@ -9,6 +9,7 @@ const reportSchema = new Schema<IReport.ReportData>({
   commentId: {
     type: String,
     required: true,
+    unique: true,
   },
   fullName: {
     type: String,

@@ -2,6 +2,7 @@ import { IRestaurant } from "../interfaces/restaurant";
 import Restaurant from "../models/restaurant.model";
 import { checkArr } from "../service/general.service";
 import { sortRestaurants } from "../service/restaurants.service";
+import userController from "./user.controller";
 
 
 const createNewRestaurant = async (restaurant: IRestaurant.RestaurantData) => {
@@ -14,7 +15,7 @@ const getRestaurant = async (restaurantId: string) => {
 }
 
 const getRestaurantByAddress = async (restaurantAddress: string) => {
-  return await Restaurant.find({address: restaurantAddress});
+  return await Restaurant.find({ address: restaurantAddress });
 }
 
 const getRestaurants = async ({ name, services, cuisines, companies, city, sortedBy }: { name: string, services: IRestaurant.Service[], cuisines: IRestaurant.Cuisine[], companies: IRestaurant.Company[], city: IRestaurant.City, sortedBy: IRestaurant.SortedBy }) => {
@@ -27,7 +28,7 @@ const getRestaurants = async ({ name, services, cuisines, companies, city, sorte
 
   const sortedRestaurants = sortRestaurants(filteredRestaurants, sortedBy);
   console.log(sortedRestaurants);
-  
+
   return sortedRestaurants;
 }
 
@@ -45,25 +46,39 @@ const updateRestaurant = async (restaurantId: string, restaurantData: IRestauran
   return await restaurant.save();
 };
 
-const getAllReviews = async () => {
+const getAllReviews = async (): Promise<IRestaurant.Review[]> => {
   const restaurants = await Restaurant.find();
 
   if (!restaurants.length) {
     throw new Error('Restaurant not found');
   }
 
+  return restaurants.reduce(async (totalReviewsPromise: Promise<IRestaurant.Review[]>, restaurant) => {
+    const totalReviews = await totalReviewsPromise;
 
-  const filteredRestaurants = restaurants.filter(restaurant => restaurant.reviews != null && restaurant.reviews != undefined);
-  const restaurantsReviews: { restaurantId: string, reviews: IRestaurant.Review[] }[] = filteredRestaurants.map(restaurant => ({ restaurantId: restaurant.id, reviews: restaurant?.reviews })) as { restaurantId: string, reviews: IRestaurant.Review[] }[]
+    if (restaurant.reviews && restaurant.reviews.length > 0) {
+      const reviewsPromises = restaurant.reviews.map(async review => {
+        const user = await userController.getUser(review.userId);
+        return {
+          _id: review._id,
+          company: review.company,
+          content: review.content,
+          starRating: review.starRating,
+          userId: review.userId,
+          restaurantId: restaurant.id,
+          userName: `${user?.firstName} ${user?.lastName}`,
+          restaurantName: restaurant.name,
+        }
+      });
 
-  let totalReviews: IRestaurant.Review[] = [];
+      const reviews = await Promise.all(reviewsPromises);
+      return [...totalReviews, ...reviews];
+    }
+    return totalReviews;
+  }, Promise.resolve([] as IRestaurant.Review[]));
+};
 
-  for (const reviewsComp of restaurantsReviews) {
-    totalReviews = [...totalReviews, ...reviewsComp.reviews];
-  }
 
-  return totalReviews;
-}
 
 const getReviews = async (restaurantId: string) => {
   const restaurant = await Restaurant.findById(restaurantId);
