@@ -19,12 +19,13 @@ const getRestaurantByAddress = async (restaurantAddress: string) => {
 }
 
 const getRestaurants = async ({ name, services, cuisines, companies, city, sortedBy }: { name: string, services: IRestaurant.Service[], cuisines: IRestaurant.Cuisine[], companies: IRestaurant.Company[], city: IRestaurant.City, sortedBy: IRestaurant.SortedBy }) => {
+  console.log(`companies: `, companies);
   const restaurants: IRestaurant.RestaurantData[] = await Restaurant.find();
   const filteredRestaurants = restaurants.filter(restaurant => (!name || restaurant.name.includes(name)) &&
     (!city || restaurant.city == city) &&
-    (!services.length || checkArr(restaurant.services, services)) &&
-    (!cuisines.length || cuisines.find(cuisine => restaurant.cuisine == cuisine)) &&
-    (!companies.length || checkArr(restaurant.companies, companies)));
+    (!services?.length || checkArr(restaurant.services, services)) &&
+    (!cuisines?.length || cuisines.find(cuisine => restaurant.cuisine == cuisine)) &&
+    (!companies?.length || checkArr(restaurant.companies, companies)));
 
   const sortedRestaurants = sortRestaurants(filteredRestaurants, sortedBy);
   console.log(sortedRestaurants);

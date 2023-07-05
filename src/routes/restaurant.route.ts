@@ -96,17 +96,24 @@ router.delete('/review/:restaurantId/:reviewId', async (req, res) => {
 })
 
 router.get(`/`, async (req, res) => {
+  console.log(req.query);
   let { name, services, cuisines, companies, city, sortedBy } = req.query
   const parsedName = name as string;
-  const parsedServices = JSON.parse((services ?? `[]`) as string) as IRestaurant.Service[];
-  const parsedCuisines = JSON.parse((cuisines ?? `[]`) as string) as IRestaurant.Cuisine[];
-  const parsedCompanies = JSON.parse((companies ?? `[]`) as string) as IRestaurant.Company[];
+
+  const ensureArray = (value: string | string[] | null) => value ? Array.isArray(value) ? value : [value] : [];
+
+  const parsedServices = ensureArray(services as string[]).map(item => item ? parseInt(item) : null) as IRestaurant.Service[];
+  const parsedCuisines = ensureArray(cuisines as string[]).map(item => item ? parseInt(item) : null) as IRestaurant.Cuisine[];
+  const parsedCompanies = ensureArray(companies as string[]).map(item => item ? parseInt(item) : null) as IRestaurant.Company[];
   const parsedCity = Number(city ?? `0`) as IRestaurant.City;
   const parsedSortedBy = Number(sortedBy ?? `0`) as IRestaurant.SortedBy;
+
+  console.log({ parsedServices, parsedCuisines, parsedCompanies, parsedCity, parsedSortedBy })
 
   const result = await restaurantController.getRestaurants({ name: parsedName, services: parsedServices, cuisines: parsedCuisines, companies: parsedCompanies, city: parsedCity, sortedBy: parsedSortedBy });
   res.status(result != null ? 200 : 404).send(result);
 })
+
 
 router.get(`/:restaurantId`, async (req, res) => {
   const { restaurantId } = req.params;

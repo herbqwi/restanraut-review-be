@@ -40,7 +40,10 @@ export namespace IRestaurant {
 
   export enum Company {
     FAMILY,
-    FRIENDS
+    CHILDREN,
+    STUDY,
+    SPECIAL_OCCASIONS,
+    BIG_GROUPS
   }
 
   export interface Review {

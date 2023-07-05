@@ -38,6 +38,10 @@ const restaurantSchema = new Schema<IRestaurant.RestaurantData>({
     type: mongoose.Schema.Types.Mixed,
     required: false,
   },
+  companies: {
+    type: mongoose.Schema.Types.Mixed,
+    required: false,
+  },
   reviews: {
     type: [{
       id: String,
