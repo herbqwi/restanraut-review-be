@@ -21,7 +21,8 @@ const userSchema = new Schema<IUser.UserData>({
   image: {
     type: String,
     required: false,
-   },
+    default: null,
+  },
   role: {
     type: Number,
     default: 0,

@@ -28,6 +28,17 @@ router.get(`/:reportId`, async (req, res) => {
   res.status(result != null ? 200 : 404).send(result);
 })
 
+router.delete(`/confirm/:reportId`, async (req, res) => {
+  const { reportId } = req.params;
+  const result = await reportController.confirmReport(reportId);
+
+  if (result) {
+    res.status(200).send(result);
+  } else {
+    res.status(404).send('Report not found');
+  }
+})
+
 router.delete(`/:reportId`, async (req, res) => {
   const { reportId } = req.params;
   const result = await reportController.deleteReport(reportId);

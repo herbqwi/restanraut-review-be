@@ -7,6 +7,7 @@ export namespace IReport {
     restaurantId: string,
     commentId: string,
     fullName: string,
+    content: string,
     createdAt: Date;
     updatedAt: Date;
   }
