@@ -8,7 +8,10 @@ const router = Router()
 router.post('/', async (req, res) => {
   try {
     console.log(`POST /restaurant`)
-    const result = await restaurantController.createNewRestaurant(req.body);
+    const { address, city, description, images, ownerId, name, phoneNumber, location, cuisine, services }: IRestaurant.RestaurantData = req.body
+    const result = await restaurantController.createNewRestaurant({
+      address, city, description, images, ownerId, name, phoneNumber, location, cuisine, services,
+    } as any);
     res.status(200).send(result);
   } catch (e: any) {
     const errMsg = `An error occurred while creating a new restaurant`;
@@ -30,19 +33,6 @@ router.post('/', async (req, res) => {
 //   }
 
 // })
-
-
-router.put('/:restaurantId', async (req, res) => {
-  try {
-    const { restaurantId } = req.params;
-    const result = await restaurantController.updateRestaurant(restaurantId, req.body);
-    res.status(200).send(result);
-  } catch (e: any) {
-    const errMsg = `An error occurred while updating an existing restaurant`;
-    console.log(`${errMsg}: `, e);
-    res.status(400).send(errMsg);
-  }
-})
 
 router.get(`/reviews`, async (req, res) => {
   try {
@@ -114,11 +104,33 @@ router.get(`/`, async (req, res) => {
   res.status(result != null ? 200 : 404).send(result);
 })
 
+router.put('/:restaurantId', async (req, res) => {
+  console.log(`PUT /`)
+  try {
+    const { restaurantId } = req.params;
+    const result = await restaurantController.updateRestaurant(restaurantId, req.body as IRestaurant.RestaurantData);
+    console.log(`result: `, result);
+    res.status(200).send(result);
+  } catch (e: any) {
+    const errMsg = `An error occurred while updating an existing user`;
+    console.log(`${errMsg}: `, e);
+    res.status(400).send(errMsg);
+  }
+})
+
 
 router.get(`/:restaurantId`, async (req, res) => {
   const { restaurantId } = req.params;
   console.log(`restuarnatId: `, restaurantId);
   const result = await restaurantController.getRestaurant(restaurantId);
+  console.log(`result: `, result);
+  res.status(result != null ? 200 : 404).send(result);
+})
+
+router.get(`/owner/:ownerId`, async (req, res) => {
+  const { ownerId } = req.params;
+  console.log(`ownerId: `, ownerId);
+  const result = await restaurantController.getRestaurantsByOwnerID(ownerId);
   console.log(`result: `, result);
   res.status(result != null ? 200 : 404).send(result);
 })

@@ -3,7 +3,7 @@ import Restaurant from "../models/restaurant.model";
 
 const getAllRestaurant = async () => {
 
-  try {  
+  try {
     const restaurant = await Restaurant.find().sort("name");
     return restaurant;
   } catch (err) {

@@ -54,11 +54,18 @@ router.get(`/`, async (req, res) => {
   res.status(result != null ? 200 : 404).send(result);
 })
 
-router.get(`/email/:email`, async (req, res) => {
+router.get(`/reserve-email/:email`, async (req, res) => {
   console.log(`GET /email`)
   const { email } = req.params;
   const result = await userController.isEmailAvailable(email);
   res.sendStatus(result ? 200 : 404);
+})
+
+router.get(`/email/:email`, async (req, res) => {
+  console.log(`GET /email`)
+  const { email } = req.params;
+  const result = await userController.getUserByEmail(email);
+  res.status(result != null ? 200 : 404).send(result);
 })
 
 router.get(`/:userId`, async (req, res) => {

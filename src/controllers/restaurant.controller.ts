@@ -6,6 +6,7 @@ import userController from "./user.controller";
 
 
 const createNewRestaurant = async (restaurant: IRestaurant.RestaurantData) => {
+  console.log(`Creating a new restaurant: `, restaurant)
   const newRestaurant = new Restaurant(restaurant);
   return await newRestaurant.save();
 }
@@ -19,13 +20,15 @@ const getRestaurantByAddress = async (restaurantAddress: string) => {
 }
 
 const getRestaurants = async ({ name, services, cuisines, companies, city, sortedBy }: { name: string, services: IRestaurant.Service[], cuisines: IRestaurant.Cuisine[], companies: IRestaurant.Company[], city: IRestaurant.City, sortedBy: IRestaurant.SortedBy }) => {
-  console.log(`companies: `, companies);
   const restaurants: IRestaurant.RestaurantData[] = await Restaurant.find();
-  const filteredRestaurants = restaurants.filter(restaurant => (!name || restaurant.name.includes(name)) &&
-    (!city || restaurant.city == city) &&
-    (!services?.length || checkArr(restaurant.services, services)) &&
-    (!cuisines?.length || cuisines.find(cuisine => restaurant.cuisine == cuisine)) &&
-    (!companies?.length || checkArr(restaurant.companies, companies)));
+  const filteredRestaurants = restaurants.filter(restaurant => {
+    console.log(`checkArr: `, checkArr(restaurant.services, services))
+    return (!name || restaurant.name.includes(name)) &&
+      (!city || restaurant.city == city) &&
+      (!services?.length || checkArr(restaurant.services, services)) &&
+      (!cuisines?.length || cuisines.find(cuisine => restaurant.cuisine == cuisine)) &&
+      (!companies?.length || checkArr(restaurant.companies as IRestaurant.Company[], companies))
+  });
 
   const sortedRestaurants = sortRestaurants(filteredRestaurants, sortedBy);
   console.log(sortedRestaurants);
@@ -39,6 +42,7 @@ const deleteRestaurant = async (restaurantId: string) => {
 
 const updateRestaurant = async (restaurantId: string, restaurantData: IRestaurant.RestaurantData) => {
   const restaurant = await Restaurant.findById(restaurantId);
+  console.log(restaurant)
   if (!restaurant) {
     throw new Error(`Restaurant with ID ${restaurantId} not found.`);
   }
@@ -46,6 +50,40 @@ const updateRestaurant = async (restaurantId: string, restaurantData: IRestauran
 
   return await restaurant.save();
 };
+
+const getRestaurantByRestaurantID = async (_id: string) => {
+
+
+  const restaurant = await Restaurant.findById({ _id })
+  return Restaurant
+}
+const getRestaurantsByOwnerID = async (ownerId: string) => {
+
+  const restaurants = await Restaurant.find({ ownerId });
+  return restaurants;
+}
+
+const getRestaurantByFoodID = async (ownerId: string, _id: string, FoodID: string) => {
+
+  const restaurants = await Restaurant.findById({ ownerId, _id });
+  return restaurants;
+}
+
+const updateRestaurantForFood = async (id: string, data: any) => {
+  try {
+    const restaurant = await Restaurant.findOneAndUpdate({ _id: id }, { ...data }, { new: true });
+    return restaurant;
+  } catch (error) {
+    throw error;
+  }
+};
+
+const getRestaurantByOwnerIDandRestaurant = async (_id: string) => {
+
+  const restaurants = await Restaurant.find({ _id });
+  return restaurants;
+}
+
 
 const getAllReviews = async (): Promise<IRestaurant.Review[]> => {
   const restaurants = await Restaurant.find();
@@ -118,4 +156,9 @@ const deleteReview = async (restaurantId: string, reviewId: string) => {
   return { message: 'Review deleted successfully' };
 };
 
-export default { createNewRestaurant, getRestaurant, getRestaurants, deleteRestaurant, updateRestaurant, getReviews, getAllReviews, addReview, deleteReview, getRestaurantByAddress };
+const getRestaurantByID = async (id: string) => {
+  const restaurant = await Restaurant.findById(id)
+  return Restaurant
+}
+
+export default { createNewRestaurant, getRestaurantByRestaurantID, getRestaurantByOwnerIDandRestaurant, getRestaurantsByOwnerID, getRestaurantByFoodID, getRestaurant, getRestaurants, deleteRestaurant, updateRestaurant, updateRestaurantForFood, getReviews, getAllReviews, addReview, deleteReview, getRestaurantByAddress, getRestaurantByID };

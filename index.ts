@@ -5,6 +5,7 @@ import bodyParser from 'body-parser';
 import restaurantRouter from "./src/routes/restaurant.route";
 import userRouter from './src/routes/user.route'
 import reportRouter from './src/routes/report.route'
+import foodRouter from './src/routes/food.route'
 
 const app = express();
 var cors = require('cors');
@@ -16,6 +17,7 @@ app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 
 
 
+app.use('/restaurant/foods', foodRouter);
 app.use('/restaurant', restaurantRouter);
 app.use('/user', userRouter);
 app.use('/report', reportRouter);

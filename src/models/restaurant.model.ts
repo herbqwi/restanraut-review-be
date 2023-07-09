@@ -26,6 +26,10 @@ const restaurantSchema = new Schema<IRestaurant.RestaurantData>({
     type: String,
     required: false
   },
+  city: {
+    type: Number,
+    required: false
+  },
   images: {
     type: [String],
     required: true,

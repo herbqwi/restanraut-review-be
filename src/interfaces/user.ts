@@ -9,6 +9,14 @@ export namespace IUser {
     ADMIN,
   }
 
+  export enum SecurityQuestion {
+    BIRTH_CITY,
+    CHILDHOOD_FRIEND,
+    FIRST_PET,
+    HIGH_SCHOOL,
+    FIRST_JOB
+  }
+
   export interface UserData {
     _id: string;
     email: string;
@@ -18,6 +26,8 @@ export namespace IUser {
     phoneNumber?: string;
     city?: IRestaurant.City;
     image?: string;
+    securityQuestion?: SecurityQuestion,
+    securityAnswer?: string,
     role: Role;
     token?: string,
     createdAt: Date;

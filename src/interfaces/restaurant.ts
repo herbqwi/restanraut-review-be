@@ -61,10 +61,12 @@ export namespace IRestaurant {
   }
 
   export interface MenuItem {
+    _id?: string;
     name: string;
     description: string;
+    restaurantId: string;
     ingredients: (string | null)[];
-    image: string;
+    images: string[];
     price: number;
     calories: number;
     category: string;
@@ -76,7 +78,7 @@ export namespace IRestaurant {
   }
 
   export interface RestaurantData {
-    _id: string;
+    _id?: string;
     name: string;
     description: string;
     address: string;
@@ -84,14 +86,14 @@ export namespace IRestaurant {
     phoneNumber: string;
     images: string[];
     cuisine: Cuisine;
-    companies: IRestaurant.Company[];
+    companies?: IRestaurant.Company[];
     services: Service[];
+    city?: City,
     reviews?: Review[];
     menuItems?: MenuItem[],
-    city: City;
-    ownerId: mongoose.Types.ObjectId;
-    createdAt: Date;
-    updatedAt: Date;
+    ownerId: String;
+    createdAt?: Date;
+    updatedAt?: Date;
   }
 
   export interface RestaurantRequest extends express.Request<{}, {}, {}, {}> {

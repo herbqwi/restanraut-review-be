@@ -15,6 +15,10 @@ const reportSchema = new Schema<IReport.ReportData>({
     type: String,
     required: true,
   },
+  userId: {
+    type: String,
+    required: true,
+  },
   fullName: {
     type: String,
     required: true,

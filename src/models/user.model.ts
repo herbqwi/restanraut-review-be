@@ -23,6 +23,14 @@ const userSchema = new Schema<IUser.UserData>({
     required: false,
     default: null,
   },
+  securityQuestion: {
+    type: Number,
+    required: false,
+  },
+  securityAnswer: {
+    type: String,
+    required: false,
+  },
   role: {
     type: Number,
     default: 0,
