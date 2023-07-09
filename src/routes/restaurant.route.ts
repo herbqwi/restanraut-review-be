@@ -87,8 +87,8 @@ router.delete('/review/:restaurantId/:reviewId', async (req, res) => {
 
 router.get(`/`, async (req, res) => {
   console.log(req.query);
-  let { name, services, cuisines, companies, city, sortedBy } = req.query
-  const parsedName = name as string;
+  let { searchTerms, services, cuisines, companies, city, sortedBy } = req.query
+  const parsedSearchTerms = searchTerms as string;
 
   const ensureArray = (value: string | string[] | null) => value ? Array.isArray(value) ? value : [value] : [];
 
@@ -100,7 +100,7 @@ router.get(`/`, async (req, res) => {
 
   console.log({ parsedServices, parsedCuisines, parsedCompanies, parsedCity, parsedSortedBy })
 
-  const result = await restaurantController.getRestaurants({ name: parsedName, services: parsedServices, cuisines: parsedCuisines, companies: parsedCompanies, city: parsedCity, sortedBy: parsedSortedBy });
+  const result = await restaurantController.getRestaurants({ name: parsedSearchTerms, services: parsedServices, cuisines: parsedCuisines, companies: parsedCompanies, city: parsedCity, sortedBy: parsedSortedBy });
   res.status(result != null ? 200 : 404).send(result);
 })
 
